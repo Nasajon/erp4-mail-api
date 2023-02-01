@@ -1,0 +1,181 @@
+imports:
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: 'en' }
+    secret:          '%env(secret)%'
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: '%kernel.debug%'
+    form:            ~
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+        #assets_version: SomeVersionScheme
+    templating:		
+        engines: ['twig']
+    default_locale:  "en"
+    session:         
+        handler_id: ~
+    fragments:       ~
+    
+# Twig Configuration		
+twig:		
+    debug:            '%kernel.debug%'		
+    strict_variables: '%kernel.debug%'
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
+    
+# Doctrine Configuration
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   '%env(database_driver)%'
+                host:     '%env(database_host)%'
+                port:     '%env(database_port)%'
+                dbname:   '%env(database_name)%'
+                user:     '%env(database_user)%'
+                password: '%env(database_password)%'
+                charset:  UTF8
+                server_version: 11.5
+                mapping_types:
+                    json: string
+                    enum: string
+                # if using pdo_sqlite as your database driver, add the path in parameters.yml
+                # e.g. database_path: %kernel.root_dir%/data/data.db3
+                # path:     %database_path%
+
+            target:
+                driver:   '%env(database_driver_target)%'
+                host:     '%env(database_host_target)%'
+                port:     '%env(database_port_target)%'
+                dbname:   '%env(database_name_target)%'
+                user:     '%env(database_user_target)%'
+                password: '%env(database_password_target)%'
+                charset:  UTF8
+                server_version: 11.5
+                mapping_types:
+                    json: string
+                    enum: string
+
+    orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                auto_mapping: true
+            target:
+                connection: target
+                mappings:
+                    NasajonMailServiceBundle: ~
+
+sensio_framework_extra:
+    view: { annotations: true }
+
+aws:
+    version: 2.0
+    region: '%env(amazon_region)%'
+    credentials:
+        key: '%env(amazon_key)%'
+        secret: '%env(amazon_secret)%'
+    S3:
+        version: '2006-03-01'
+    Ses:
+        version: '2010-12-01'
+
+fos_rest:
+    
+    disable_csrf_role: ROLE_API
+    param_fetcher_listener: true
+    routing_loader:
+        default_format: ~
+        include_format: false
+    view:
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1']
+        view_response_listener: 
+            force: true
+        formats:            
+            json: true
+            xml:  true
+            html: true
+        templating_formats:
+            html: true
+    format_listener:
+        rules:
+            - { path: ^/api, priorities: [ json ], fallback_format: json, prefer_extension: true }
+            - { path: ^/v2/api, priorities: [ json ], fallback_format: json, prefer_extension: true }
+            - { path: ^/, priorities: [ html ], fallback_format: html, prefer_extension: true }
+    body_converter:
+        enabled: true
+        validate: true
+    exception:
+        enabled: true        
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException': 405
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    allowed_methods_listener: true    
+
+
+nasajon_login:
+    permission_format: ~
+    permission_type: ~
+    #diretorio_sistema_id: '%env(diretorio_sistema_id)%'
+    
+light_saml_symfony_bridge:
+    own:
+        entity_id: "%env(entity_id)%"
+        credentials:
+            -
+                certificate: "%env(sp_certificate_crt)%"
+                key:         "%env(sp_certificate_pem)%"
+                password:    ~
+    party:
+        idp:
+            files:
+                - "%env(sp_metadata)%"
+    store:
+        id_state: id_store  # name of id store service created in step 6
+
+knp_gaufrette:
+    adapters:
+        release:
+            local:
+                directory:  '%kernel.cache_dir%'
+                create:     true
+
+        emails_anexos:
+            local:
+                directory:  '%kernel.cache_dir%'
+                create:     true
+    filesystems:
+        release:
+            adapter: release     
+        emails_anexos:
+            adapter: emails_anexos
+
+#Rabbit Mque
+bernard:
+    driver: phpamqp
+    options:
+        phpamqp_exchange: my_phpamqp_service
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:     '%env(rabbitmq_host)%'
+            port:     '%env(rabbitmq_port)%'
+            user:     '%env(rabbitmq_user)%'
+            password: '%env(rabbitmq_password)%'
+            vhost:    '%env(rabbitmq_vhost)%'
+            lazy:     true
+            connection_timeout: 3
+            read_write_timeout: 3
+            # requires php-amqplib v2.4.1+ and PHP5.4+
+            keepalive: false
+            # requires php-amqplib v2.4.1+
+            heartbeat: 0

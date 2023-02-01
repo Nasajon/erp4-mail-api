@@ -1,0 +1,15 @@
+nasajon_login_bundle:
+    resource: "@NasajonLoginBundle/Resources/config/routing.yml"
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    prefix: /fosrouting
+
+app:
+   resource: "routing/app.yml"
+
+api:
+   resource: "routing/api.yml"
+   type: rest
+   prefix: /v2/api
+   type: rest

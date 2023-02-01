@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+    app:
+        image: nasajon/php:7.1-fpm-symfony-dev
+        restart: always
+        ports:
+            - "80:80"
+        volumes:
+            - $PWD:/var/www/html        
+        env_file:
+            - common.env
+        external_links:
+            - diretorio_postgres_1:postgres
+            - diretorio_postgres_1:integratto
+        networks:
+            - diretorio_default
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        expose:
+            - "6379"
+        ports:
+            - "15672:15672"
+        restart: always
+        environment:
+            - RABBITMQ_DEFAULT_VHOST=diretorio
+        
+    memcache:
+        image: memcached
+        restart: always
+        hostname: memcache
+        mem_limit: 268435456
+        expose:
+          - "11211"
+        networks:
+          - diretorio_default
+        entrypoint:
+          - memcached
+
+networks:
+  diretorio_default:
+    external: true

@@ -1,0 +1,4 @@
+email:
+    controller: "Nasajon\\AppBundle\\NsjMail\\Controller\\EmailsController::sendEmailAction"
+    path: "/sendmail"
+    methods: [POST]
