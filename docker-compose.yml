@@ -7,14 +7,27 @@ services:
         ports:
             - "80:80"
         volumes:
-            - $PWD:/var/www/html        
+            - $PWD:/var/www/html
         env_file:
             - common.env
-        external_links:
-            - diretorio_postgres_1:postgres
-            - diretorio_postgres_1:integratto
         networks:
-            - diretorio_default
+            network_default:
+                aliases:
+                    - email_api
+
+    postgres:
+        image: postgres:11.5
+        ports:
+            - "5432:5432"
+        restart: always
+        volumes:
+            - $PWD/database/dump:/docker-entrypoint-initdb.d/
+        environment:
+            - "POSTGRES_DB=email"
+            - "POSTGRES_USER=email"
+            - "POSTGRES_PASSWORD=mysecretpassword"
+        networks:
+            - network_default
 
     rabbitmq:
         image: rabbitmq:3-management
@@ -25,7 +38,9 @@ services:
         restart: always
         environment:
             - RABBITMQ_DEFAULT_VHOST=diretorio
-        
+        networks:
+            - network_default
+
     memcache:
         image: memcached
         restart: always
@@ -34,10 +49,10 @@ services:
         expose:
           - "11211"
         networks:
-          - diretorio_default
+          - network_default
         entrypoint:
           - memcached
 
 networks:
-  diretorio_default:
+  network_default:
     external: true
