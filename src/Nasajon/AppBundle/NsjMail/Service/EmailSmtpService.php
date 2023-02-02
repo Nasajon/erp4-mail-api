@@ -13,7 +13,7 @@ use Swift_SmtpTransport;
 
 class EmailSmtpService {
 
-    private const MAIL_BODY = "text/html";
+    private const MAIL_BODY_TYPE = "text/html";
 
     /**     
      * @var EmailsSmtpRepository
@@ -33,18 +33,24 @@ class EmailSmtpService {
     
     private $adapter;
 
-    public function __construct(EmailsSmtpRepository $repository, LoggerInterface $logger, string $cacheDir, $adapter) {
+    /**     
+     * @var PasswordService
+     */
+    private $passwordService;
+
+    public function __construct(EmailsSmtpRepository $repository, LoggerInterface $logger, string $cacheDir, $adapter, PasswordService $passwordService) {
         $this->repository = $repository;
         $this->logger = $logger;
         $this->cacheDir = $cacheDir;
         $this->adapter = $adapter;
+        $this->passwordService = $passwordService;
     }
 
     public function getRepository() : EmailsSmtpRepository {
         return $this->repository;
     }
 
-    public function enviar(EnvioMessage $message) {
+    public function enviar(EnvioMessage $message) : bool {
 
         //Verifica se a mensagem possui tenant
         if(empty($message->getTenant())) {
@@ -61,10 +67,13 @@ class EmailSmtpService {
 
         $this->logger->info("Tentativa de envio de email via SMTP", $this->emailMessageToArray($message));
 
+        //Decripta a senha.
+        $senha = $this->passwordService->decrypt($smtpData['senha']);        
+
         //Faz autenticação no servidor SMTP.
         $transport = (new Swift_SmtpTransport($this->montaUrlTransport($smtpData['port'], $smtpData['host']), $smtpData['port']))
         ->setUsername($smtpData['usuario'])
-        ->setPassword($smtpData['senha']);
+        ->setPassword($senha);
 
         $mailer = new Swift_Mailer($transport);
 
@@ -75,7 +84,7 @@ class EmailSmtpService {
         ->setCc($message->getCc())
         ->setBcc($message->getBcc())
         ->setReplyTo($message->getReplyto())
-        ->setBody($message->getBody(), self::MAIL_BODY);
+        ->setBody($message->getBody(), self::MAIL_BODY_TYPE);
 
         //Verifica se há anexos.
         if(!empty($message->getAttachments())) {
@@ -105,6 +114,12 @@ class EmailSmtpService {
         return false;
     }
 
+    /**
+     * Método responsável por montar a URL de transport, para evitar o uso do Sendmail     
+     * @param integer $port
+     * @param string $host
+     * @return string
+     */
     private function montaUrlTransport(int $port, string $host) : string {
 
         switch($port) {

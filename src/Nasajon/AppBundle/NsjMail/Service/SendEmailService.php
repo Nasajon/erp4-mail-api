@@ -59,7 +59,7 @@ class SendEmailService {
         }
 
         // Envia via Amazon SES.
-        return $result = $this->emailSesService->enviar($message);
+        return $this->emailSesService->enviar($message);
         
     }
 

@@ -65,7 +65,8 @@ doctrine:
         entity_managers:
             default:
                 connection: default
-                auto_mapping: true
+                mappings:
+                    NasajonMailServiceBundle: ~
             target:
                 connection: target
                 mappings:

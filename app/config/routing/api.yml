@@ -2,3 +2,8 @@ email:
     controller: "Nasajon\\AppBundle\\NsjMail\\Controller\\EmailsController::sendEmailAction"
     path: "/sendmail"
     methods: [POST]
+
+adicionar_smtp:
+    controller: "Nasajon\\AppBundle\\NsjMail\\Controller\\ConfiguracaoSmtpController::postAction"
+    path: "/configuracao-smtp"
+    methods: [POST]
