@@ -30,8 +30,7 @@ class ConfiguracaoSmtpRepository {
         return $this->connection;
     }
 
-    /**
-     * Undocumented function     
+    /**     
      * @return EntityManager
      */
     public function getEntityManager() : EntityManager {
@@ -39,12 +38,51 @@ class ConfiguracaoSmtpRepository {
     }
 
     /**
-     * Undocumented function
-     *
+     * Método responsável por retornar o id de uma configuração.     
+     * @param string $usuario
+     * @param integer $tenantId
+     * @return array
+     */
+    public function find(string $usuario, int $tenantId) : array {
+
+        $sql = "SELECT id
+        FROM diretorio.tenants_smtp
+        WHERE usuario = :usuario
+        AND tenant_id = :tenant_id
+        LIMIT 1";
+
+        $data = $this->getConnection()
+        ->executeQuery($sql, [
+          'usuario' => $usuario,
+          'tenant_id' => $tenantId
+        ])->fetch();
+
+        return $data;
+        
+    }
+
+    /**
+     * Método responsável por criar a entidade e salvar no BD.     
      * @param array $data
      * @return array
      */
     public function insert(array $data) : array {        
+        
+        $smtp = $this->setEntity($data);
+        
+        $this->getEntityManager()->persist($smtp);
+        $this->getEntityManager()->flush();
+
+        return $this->smtpEntityToArray($smtp);
+        
+    }
+
+    /**
+     * Método responsável por preencher o objeto Smtp.     
+     * @param array $data
+     * @return Smtp
+     */
+    private function setEntity(array $data) : Smtp {
 
         $smtp = new \Nasajon\AppBundle\NsjMail\Entity\Smtp();
         $smtp->setNome($data["nome"]);
@@ -54,12 +92,9 @@ class ConfiguracaoSmtpRepository {
         $smtp->setPort($data["port"]);
         $smtp->setTenantId($data["tenant_id"]);
 
-        $this->getEntityManager()->persist($smtp);
-        $this->getEntityManager()->flush();
+        return $smtp;
+    }
 
-        return $this->smtpEntityToArray($smtp);
-        
-    } 
     /**
      * Método responsável por converter o objeto Smtp em um array.     
      * @param Smtp $smtp

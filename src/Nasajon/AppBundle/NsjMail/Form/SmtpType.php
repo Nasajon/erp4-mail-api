@@ -28,13 +28,6 @@ class SmtpType extends AbstractType
                         'message' => 'O campo host não pode ser vazio.',
                     ])
                 ],
-            ])->add('smtp_auth', CheckboxType::class, [
-                'required' => true,
-                'constraints' => [
-                    new \Symfony\Component\Validator\Constraints\NotBlank([
-                        'message' => 'O campo smtp_auth não pode ser vazio.',
-                    ])
-                ],
             ])->add('usuario', TextType::class, [
                 'required' => true,
                 'constraints' => [
@@ -53,14 +46,14 @@ class SmtpType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new \Symfony\Component\Validator\Constraints\NotBlank([
-                        'message' => 'O campo senha não pode ser vazio.',
+                        'message' => 'O campo port não pode ser vazio.',
                     ])
                 ],
             ])->add('tenant_id', TextType::class, [
                 'required' => true,
                 'constraints' => [
                     new \Symfony\Component\Validator\Constraints\NotBlank([
-                        'message' => 'O campo senha não pode ser vazio.',
+                        'message' => 'O campo tenant_id não pode ser vazio.',
                     ])
                 ],
             ]);
