@@ -1,6 +1,11 @@
 nasajon_login_bundle:
     resource: "@NasajonLoginBundle/Resources/config/routing.yml"
 
+ekreative_health_check:
+    resource: "@EkreativeHealthCheckBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
     prefix: /fosrouting

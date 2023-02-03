@@ -11,8 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Envios
  *
- * @ORM\Table(name="maladireta.envios")
- * @ORM\Entity(repositoryClass="NNasajon\AppBundle\NsjMail\Repository\EnviosRepository")
+ * @ORM\Table(name="email.envios")
+ * @ORM\Entity(repositoryClass="Nasajon\AppBundle\NsjMail\Repository\EnviosRepository")
  */
 class Envios {
 

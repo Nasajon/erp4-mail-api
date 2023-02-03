@@ -20,6 +20,11 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        auth_sns:
+            pattern:   ^/v2/api/sns/snsEvent
+            anonymous: ~
+            stateless: true
+            security: false
         
         api:
             pattern:   ^/v2/api
@@ -27,7 +32,10 @@ security:
             simple_preauth:
                 authenticator: nasajon_login_bundle_authenticator_api_key
                 provider: apikeyprovider
-                
+
+        healthcheck:
+            pattern: ^/healthcheck
+            security: false
 
         secured_area:
             light_saml_sp:
@@ -48,5 +56,6 @@ security:
     access_control:
         - { path: ^/saml, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/fosrouting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/healthcheck, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v2/api,       roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }

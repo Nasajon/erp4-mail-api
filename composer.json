@@ -34,7 +34,8 @@
         "bernard/bernard-bundle": "^2.0",
         "php-amqplib/rabbitmq-bundle": "^1.14.1",
         "swiftmailer/swiftmailer": "6.0",
-        "defuse/php-encryption": "^2.3"
+        "defuse/php-encryption": "^2.3",
+        "aws/aws-php-sns-message-validator": "^1.4"
     },
     "require-dev": {
         "sensio/distribution-bundle": "^5.0.19",

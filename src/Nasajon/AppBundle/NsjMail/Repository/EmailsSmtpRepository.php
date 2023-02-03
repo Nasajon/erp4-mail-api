@@ -22,7 +22,7 @@ class EmailsSmtpRepository extends AbstractRepository {
     public function getConfiguracoesSmtp(string $email, int $tenant) {
 
         $sql = "SELECT nome, host, usuario, senha, port, tenant_id
-        FROM diretorio.tenants_smtp
+        FROM email.tenants_configuracoes_smtp
         WHERE usuario = :usuario AND tenant_id = :tenant_id";
         
 

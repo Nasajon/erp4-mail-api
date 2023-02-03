@@ -24,7 +24,8 @@ class AppKernel extends Kernel {
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Aws\Symfony\AwsBundle(),
-            new \Nasajon\AppBundle\NsjMail\NasajonMailServiceBundle()
+            new \Nasajon\AppBundle\NsjMail\NasajonMailServiceBundle(),
+            new Ekreative\HealthCheckBundle\EkreativeHealthCheckBundle()
         );
 
         if (in_array($this->getEnvironment(), array('prod'), true)) {

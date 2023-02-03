@@ -25,7 +25,7 @@ class EmailsController extends FOSRestController {
         $headers = $request->headers->all();
 
         $form = $this->get('form.factory')
-            ->createNamedBuilder(null, EmailsType::class, null,['method' => 'POST'])
+            ->createNamedBuilder(null, EmailsType::class, null, ['method' => 'POST'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -77,16 +77,13 @@ class EmailsController extends FOSRestController {
                         isset($email['attachments_content_types'][$key]) ? [$email['attachments_content_types'][$key]] : []);
                 }
             } else {
-                $this->getService()->queueMail($tenant, $sistema, $email['from'],
-                    $email['to'], $template, $email['tags'], $email['attachments'], $email['attachments_names'], $email['attachments_content_types']);
+                $this->getService()->queueMail($tenant, $sistema, $email['from'], $email['to'], $template, $email['tags'], $email['attachments'], $email['attachments_names'], $email['attachments_content_types']);
             }
 
             return new JsonResponse(['sucesso' => true]);
 
         } else {
-
-            return new JsonResponse(array('sucesso' => false, 'erros' => $this->getFormErrorMessages($form)),
-                JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(array('sucesso' => false, 'erros' => $this->getFormErrorMessages($form)), JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 
