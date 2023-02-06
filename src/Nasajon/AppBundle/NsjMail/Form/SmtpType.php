@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class SmtpType extends AbstractType
 {
@@ -42,8 +43,17 @@ class SmtpType extends AbstractType
                         'message' => 'O campo senha não pode ser vazio.',
                     ])
                 ],
-            ])->add('port', TextType::class, [
+            ])->add('port', ChoiceType::class, [
+
+                'label' => 'Porta SMTP',
                 'required' => true,
+                'error_bubbling' => true,
+                'invalid_message' => "A porta deve ser uma das seguintes: 587, 465 ou 25.",
+                'choices' => [
+                    "587",
+                    "465",
+                    "25"
+                ],
                 'constraints' => [
                     new \Symfony\Component\Validator\Constraints\NotBlank([
                         'message' => 'O campo port não pode ser vazio.',

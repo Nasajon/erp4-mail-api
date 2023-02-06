@@ -57,7 +57,7 @@ class ConfiguracaoSmtpService {
     private function validateEmail(string $email) : bool {
 
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new EmailInvalidoExeception("O email '{$email}' é inválido.", 400);
+            throw new EmailInvalidoException("O email '{$email}' é inválido.", 400);
         }
 
         return true;

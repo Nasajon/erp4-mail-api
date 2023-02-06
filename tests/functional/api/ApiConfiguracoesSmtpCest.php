@@ -152,4 +152,22 @@ class ApiConfiguracoesSmtpCest {
         $I->assertEquals("O campo tenant_id não pode ser vazio.", $data["erros"]["tenant_id"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
+
+    public function apiInsertConfiguracaoSmtpPortaInvalidaTest(FunctionalTester $I) {
+
+        $I->amLoggedInAs(1);
+
+        $data = [
+            "nome" => "Usuário Qualquer",
+	        "host" => "smtp.gmail.com",	        
+	        "usuario" => "usuarioqualquer@gmail.com",
+	        "senha" => "abcdefghiklas",
+	        "port" => 400,
+	        "tenant_id" => 47
+        ];
+
+        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $I->assertEquals('A porta deve ser uma das seguintes: 587, 465 ou 25.', $data['erros']['port']);
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
+    }
 }

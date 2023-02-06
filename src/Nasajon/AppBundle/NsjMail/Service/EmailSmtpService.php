@@ -3,6 +3,7 @@
 namespace Nasajon\AppBundle\NsjMail\Service;
 
 use Gaufrette\Adapter;
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailPortaInvalidaException;
 use Nasajon\AppBundle\NsjMail\Messages\EnvioMessage;
 use Nasajon\AppBundle\NsjMail\Repository\EmailsSmtpRepository;
 use Psr\Log\LoggerInterface;
@@ -122,6 +123,7 @@ class EmailSmtpService {
      * @param integer $port
      * @param string $host
      * @return string
+     * @throws EmailPortaInvalidaException
      */
     private function montaUrlTransport(int $port, string $host) : string {
 
@@ -139,6 +141,9 @@ class EmailSmtpService {
                 $host = $host;
                 break;
 
+            default:
+                throw new EmailPortaInvalidaException("A porta do email é inválida.", 400);
+                break;
         }
 
         return $host;
