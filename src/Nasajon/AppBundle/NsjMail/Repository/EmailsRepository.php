@@ -12,7 +12,7 @@ class EmailsRepository extends AbstractRepository {
         t0_.conteudo,
         t0_.assunto,
         t0_.remetente
-        FROM maladireta.templates t0_
+        FROM email.templates t0_
         WHERE (t0_.codigo = :codigo
         AND t0_.tenant = :tenant)
         OR
@@ -49,7 +49,7 @@ class EmailsRepository extends AbstractRepository {
         t0_.recepcao_ativa,
         t0_.padrao,
         t0_.interno
-        FROM maladireta.remetentes t0_
+        FROM email.remetentes t0_
         WHERE remetente = :remetente;";
 
         return $this->getConnection()->executeQuery($sql, ["remetente" => $remetente ])->fetch();
@@ -63,7 +63,7 @@ class EmailsRepository extends AbstractRepository {
         t0_.email,
         t0_.created_at,
         t0_.expiracao
-        FROM maladireta.blacklistemails t0_
+        FROM email.blacklistemails t0_
         WHERE lower(email) = :email;";
 
         return $this->getConnection()->executeQuery($sql, ["email" => strtolower($email) ])->fetchAll();

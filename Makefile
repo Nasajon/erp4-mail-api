@@ -1,4 +1,4 @@
-.PHONY: config_common start composer_install docker_reqs_up test_db create_db run
+.PHONY: config_common start composer_install docker_reqs_up test_db create_db run tests
 
 config_common:
 	cp common.env.dist common.env
@@ -10,7 +10,12 @@ composer_install:
 
 docker_reqs_up:
 	- docker network create network_default
+	docker-compose up -d rabbitmq
 	docker-compose up -d postgres
+
+tests:
+	rm -f app/logs/t*.log
+	docker-compose run --rm -e SYMFONY_ENV=test app vendor/codeception/codeception/codecept run --fail-fast
 
 test_db: docker_reqs_up
 	@echo "Banco email inicializando...";

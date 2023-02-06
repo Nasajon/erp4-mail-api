@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="NNasajon\AppBundle\NsjMail\Repository\ConfiguracaoSmtpRepository")
- * @ORM\Table(name="diretorio.tenants_smtp")
+ * @ORM\Table(name="email.tenants_configuracoes_smtp")
  */
 class Smtp {
 

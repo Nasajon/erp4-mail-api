@@ -14,6 +14,9 @@ use Swift_SmtpTransport;
 class EmailSmtpService {
 
     private const MAIL_BODY_TYPE = "text/html";
+    private const MAIL_SSL = 465;
+    private const MAIL_TLS = 587;
+    private const MAIL_DEFAULT = 25;
 
     /**     
      * @var EmailsSmtpRepository
@@ -124,15 +127,15 @@ class EmailSmtpService {
 
         switch($port) {
 
-            case 465:
+            case self::MAIL_SSL:
                 $host = "ssl://{$host}";
                 break;
 
-            case 587:
+            case self::MAIL_TLS:
                 $host = "tls://{$host}";
                 break;
 
-            case 25:
+            case self::MAIL_DEFAULT:
                 $host = $host;
                 break;
 
@@ -142,6 +145,11 @@ class EmailSmtpService {
 
     }
 
+    /**
+     * Método responsável por converter o objeto Mensagem para um Array (Apenas para logs)     
+     * @param EnvioMessage $message
+     * @return array
+     */
     private function emailMessageToArray(EnvioMessage $message) : array {
         return [
             'tenant' => $message->getTenant(),

@@ -7,3 +7,8 @@ adicionar_smtp:
     controller: "Nasajon\\AppBundle\\NsjMail\\Controller\\ConfiguracaoSmtpController::postAction"
     path: "/configuracao-smtp"
     methods: [POST]
+
+mail_service_sns:
+    resource: "@NasajonMailServiceBundle/Controller/Sns"
+    type:     annotation
+    prefix:   /sns

@@ -103,6 +103,13 @@ services:
             - '%env(salt)%'
             - '@logger'
 
+    Nasajon\AppBundle\NsjMail\Service\SnsNotificationService:
+        class: Nasajon\AppBundle\NsjMail\Service\SnsNotificationService
+        public: true
+        arguments:
+            - '@doctrine'
+            - '@jms_serializer'
+
     ##Repositories
 
     Nasajon\AppBundle\NsjMail\Repository\EmailsRepository:

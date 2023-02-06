@@ -36,9 +36,9 @@ class PasswordService {
     /**
      * Método responsável por decriptar uma string.     
      * @param string $val
-     * @return mixed
+     * @return string
      */
-    public function decrypt(string $val) : mixed {
+    public function decrypt(string $val) : string {
         try {
             return Crypto::decrypt($val, $this->getKey());
         }catch(WrongKeyOrModifiedCiphertextException $e) {
