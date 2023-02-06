@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoExeception;
 use Nasajon\AppBundle\NsjMail\Form\SmtpType;
 use Nasajon\AppBundle\NsjMail\Service\ConfiguracaoSmtpService;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,6 +49,20 @@ class ConfiguracaoSmtpController extends FOSRestController {
             }catch(ORMException $e) {
                 return new JsonResponse($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
+
+        } else {
+            return new JsonResponse(array('sucesso' => false, 'erros' => $this->getFormErrorMessages($form)), JsonResponse::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function getFormErrorMessages(Form $form) {
+
+        $errors = [];
+
+        foreach (iterator_to_array($form->getErrors(true)) as $error) {
+            $errors[$error->getOrigin()->getName()] = $error->getMessage();
+        }
+
+        return $errors;
     }
 }

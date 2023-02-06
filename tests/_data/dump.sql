@@ -1,4 +1,4 @@
-TRUNCATE TABLE email.envios;
+TRUNCATE TABLE email.envios, email.tenants_configuracoes_smtp;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION uuid_generate_v4()
   LANGUAGE c VOLATILE STRICT
   COST 1;
 ALTER FUNCTION uuid_generate_v4()
-  OWNER TO postgres;
+  OWNER TO group_nasajon;
 
 --Template do mala para os testes
 INSERT INTO email.templates (template, descricao, conteudo, tenant, assunto, codigo)

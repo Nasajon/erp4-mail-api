@@ -21,7 +21,8 @@ final class Version20230203084911 extends AbstractMigration {
                 senha varchar(220) NOT NULL,
                 port smallint NOT NULL,
                 tenant_id smallint NOT NULL,
-                CONSTRAINT pk_email_tenants_smtp_id PRIMARY KEY (id)
+                CONSTRAINT pk_email_tenants_smtp_id PRIMARY KEY (id),
+                CONSTRAINT uk_tenant_email UNIQUE (usuario, tenant_id)
             );
         ");
     }

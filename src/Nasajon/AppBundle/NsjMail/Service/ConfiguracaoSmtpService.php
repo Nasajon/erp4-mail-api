@@ -2,7 +2,7 @@
 
 namespace Nasajon\AppBundle\NsjMail\Service;
 
-use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoExeception;
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoException;
 use Nasajon\AppBundle\NsjMail\Repository\ConfiguracaoSmtpRepository;
 
 class ConfiguracaoSmtpService {
@@ -29,10 +29,29 @@ class ConfiguracaoSmtpService {
     public function insert(array $data) : array {
 
         if($this->validateEmail($data['usuario'])) {
-            $data['senha'] = $this->passwordService->encrypt($data['senha']);
-            return $this->getRepository()->insert($data);            
+            
+            if($this->verificaSeOEmailJaExiste($data['usuario'], $data['tenant_id'])) {
+                
+                $data['senha'] = $this->passwordService->encrypt($data['senha']);
+                return $this->getRepository()->insert($data);            
+            }
+
+            throw new EmailInvalidoException("Este email já está cadastrado para outro tenant.", 500);
+
         }
 
+    }
+
+    private function verificaSeOEmailJaExiste(string $email, int $tenant) : bool {
+
+        $data = $this->getRepository()->find($email, $tenant);
+
+        if(!$data) {
+            return true;
+        }
+
+        return false;
+        
     }
 
     private function validateEmail(string $email) : bool {

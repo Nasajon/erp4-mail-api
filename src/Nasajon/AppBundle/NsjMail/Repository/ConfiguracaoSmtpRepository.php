@@ -43,10 +43,10 @@ class ConfiguracaoSmtpRepository {
      * @param integer $tenantId
      * @return array
      */
-    public function find(string $usuario, int $tenantId) : array {
+    public function find(string $usuario, int $tenantId) {
 
         $sql = "SELECT id
-        FROM email.tenants_smtp
+        FROM email.tenants_configuracoes_smtp
         WHERE usuario = :usuario
         AND tenant_id = :tenant_id
         LIMIT 1";
