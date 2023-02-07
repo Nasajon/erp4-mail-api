@@ -36,6 +36,14 @@ start:
 
 run: config_common composer_install create_db tests start
 
+##Gera a hash de criptografia para a senha do SMTP
+generate_key:
+	docker-compose run --rm -e SYMFONY_ENV=dev app vendor/bin/generate-defuse-key
+
+##Gera a fila de logs para o RabbitMQ
+rabbit_setup_fabric:
+	docker-compose run --rm app app/console rabbitmq:setup-fabric
+
 ## Envio de E-mails
 consume_envio:
 	docker-compose run --rm app app/console bernard:consume --env=dev -vvv envio --stop-when-empty --stop-on-error

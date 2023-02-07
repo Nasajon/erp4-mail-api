@@ -5,7 +5,7 @@ namespace Nasajon\AppBundle\NsjMail\Controller;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use FOS\RestBundle\Controller\FOSRestController;
-use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoExeception;
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoException;
 use Nasajon\AppBundle\NsjMail\Form\SmtpType;
 use Nasajon\AppBundle\NsjMail\Service\ConfiguracaoSmtpService;
 use Symfony\Component\Form\Form;
@@ -41,13 +41,13 @@ class ConfiguracaoSmtpController extends FOSRestController {
                 $data = $this->getService()->insert($postData);
                 return new JsonResponse($data, JsonResponse::HTTP_CREATED);
 
-            }catch(EmailInvalidoExeception $e) {
-                return new JsonResponse($e->getMessage(), JsonResponse::HTTP_BAD_REQUEST);
+            }catch(EmailInvalidoException $e) {
+                return new JsonResponse(["message" => $e->getMessage(), "code" => 400], JsonResponse::HTTP_BAD_REQUEST);
             }
             catch(ORMInvalidArgumentException $e) {
-                return new JsonResponse($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return new JsonResponse(["message" => $e->getMessage(), "code" => 500], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }catch(ORMException $e) {
-                return new JsonResponse($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return new JsonResponse(["message" => $e->getMessage(), "code" => 500], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 
         } else {
@@ -55,7 +55,12 @@ class ConfiguracaoSmtpController extends FOSRestController {
         }
     }
 
-    public function getFormErrorMessages(Form $form) {
+    /**
+     * Método responsável por iterar os erros do form e retornar em formato de array.     
+     * @param Form $form
+     * @return array
+     */
+    public function getFormErrorMessages(Form $form) : array {
 
         $errors = [];
 
