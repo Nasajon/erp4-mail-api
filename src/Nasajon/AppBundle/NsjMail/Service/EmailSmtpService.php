@@ -110,6 +110,7 @@ class EmailSmtpService {
 
         }
 
+        //Envia o email
         if($mailer->send($mail) > 0) {
             $this->logger->info("O email foi enviado com sucesso.");
             return true;

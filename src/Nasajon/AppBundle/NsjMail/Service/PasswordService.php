@@ -47,7 +47,7 @@ class PasswordService {
     }
 
     /**
-     * Método responsável por retornar a chave de criptografica.
+     * Método responsável por retornar a chave de criptografia.
      * Para gerar a chave, basta executar:
      * php vendor/bin/generate-defuse-key
      * @return Key

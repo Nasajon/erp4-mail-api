@@ -95,6 +95,7 @@ services:
         arguments:
             - "@Nasajon\\AppBundle\\NsjMail\\Repository\\ConfiguracaoSmtpRepository"
             - "@Nasajon\\AppBundle\\NsjMail\\Service\\PasswordService"
+            - "@logger"
 
     Nasajon\AppBundle\NsjMail\Service\PasswordService:
         class: Nasajon\AppBundle\NsjMail\Service\PasswordService
@@ -109,6 +110,11 @@ services:
         arguments:
             - '@doctrine'
             - '@jms_serializer'
+
+    monolog_mq_channel:
+        class: PhpAmqpLib\Channel\AMQPChannel
+        arguments:
+          - "@old_sound_rabbit_mq.connection.default"
 
     ##Repositories
 

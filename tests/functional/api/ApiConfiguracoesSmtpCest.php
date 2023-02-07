@@ -42,7 +42,7 @@ class ApiConfiguracoesSmtpCest {
         $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("Este email já está cadastrado para outro tenant.", $data["message"]);
-        $I->seeResponseCodeIs(HttpCode::INTERNAL_SERVER_ERROR);
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
     public function apiFalhaAoInserirSemNome(FunctionalTester $I) {
@@ -187,6 +187,6 @@ class ApiConfiguracoesSmtpCest {
         $retorno = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O email '{$data['usuario']}' é inválido.", $retorno["message"]);
-        $I->seeResponseCodeIs(HttpCode::INTERNAL_SERVER_ERROR);
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 }
