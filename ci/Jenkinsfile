@@ -1,0 +1,72 @@
+node('aws-codebuild') {
+    
+    stage('Clean') {
+        deleteDir()
+    }
+
+    stage('Fetch') {
+        timeout(time: 60, unit: 'SECONDS') {
+            checkout scm
+        }
+    }
+
+    def PLAYBOOK = "/opt/devops/Ansible/ci.yml"
+    
+    stage('Environment Config') {
+        sh "auto_config"
+    }
+
+    stage('Config'){
+        sh 'mkdir -p app/logs'
+        sh 'cp app/config/parameters.yml.dist app/config/parameters.yml'
+        sh 'cp common.env.dist common.env'
+        sh 'rm -rf build/logs'  
+        sh 'mkdir -p build/logs'
+    }
+
+    stage('Composer-dev'){
+        docker.image("nasajon/composer:1.7.2").inside("-v /root/.ssh:/root/.ssh") {
+        sh 'composer install --prefer-dist --optimize-autoloader --no-scripts --ignore-platform-reqs'
+        }
+    }
+
+    stage('Tests') {
+        docker.image('postgres:11.5').withRun('-e "POSTGRES_DB=email" -e "POSTGRES_USER=email"'){ c ->
+            docker.image('nasajon/php:7.1-fpm-symfony-dev').inside("--link ${c.id}:postgres --env-file $WORKSPACE/common.env -e SYMFONY_DEPRECATIONS_HELPER=disabled -e sp_metadata=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/idp-FederationMetadata.xml -e sp_certificate_crt=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/server.crt -e sp_certificate_pem=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/server.pem -e SYMFONY_ENV=test") {
+                sh 'app/console doctrine:migrations:migrate --no-interaction'
+                sh 'vendor/codeception/codeception/codecept run  --no-colors'
+            }
+        }
+    }
+    
+    stage('Composer'){
+        docker.image("nasajon/composer:1.7.2").inside("-v /root/.ssh:/root/.ssh") {
+            sh 'composer install --prefer-dist --optimize-autoloader --no-scripts --no-dev --ignore-platform-reqs'
+            sh 'composer dump-autoload'
+        }
+    }
+
+    stage('Deploy'){
+
+    	if (env.BRANCH_NAME == 'development') {
+            stage('Deploy Dev'){
+                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=dev'"
+            }
+    	}
+        else if (env.BRANCH_NAME == 'master') {
+	        stage('Deploy QA'){
+	    	    sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=qa'"
+          	}
+        }
+        else if (env.BRANCH_NAME == 'production') {
+            stage('Pipeline Prod'){
+                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=prod'"
+            }
+        }
+        else {
+            stage('Build Docker Image'){
+                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=test'"
+            }
+        }
+    }
+}

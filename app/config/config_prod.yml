@@ -40,5 +40,29 @@ monolog:
             process_psr_3_messages: false
             channels: '%log_channels%'
 
+knp_gaufrette:
+    adapters:
+        release:
+            aws_s3:
+                service_id: 'aws.s3'
+                bucket_name: '%env(amazon_s3_bucket_name)%'
+                detect_content_type: false
+                options:
+                    directory: '%env(amazon_s3_bucket_path)%'
+                    acl: 'public-read'
+        emails_anexos:
+            aws_s3:
+                service_id: 'aws.s3'
+                bucket_name: '%env(amazon_s3_bucket_name)%'
+                detect_content_type: false
+                options:
+                    directory: 'emails-anexos'
+                    acl: 'public-read'
+    filesystems:
+        release:
+            adapter: release
+        emails_anexos:
+            adapter: emails_anexos
+
 sentry:
     dsn: "https://3017bc8d9a1b477493ed2c9c90f5d45a:ef4cf8e537364a539b73255da98d9ae1@sentry.nasajon.com.br/8"
