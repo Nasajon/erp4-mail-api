@@ -81,7 +81,7 @@ class SnsNotificationService {
         $mailMessage = $notification->getMail();
 
         /** @var Nasajon\Diretorio\MailServiceBundle\Entity\Envios */
-        $envio = $this->registry->getManager("target")->getRepository("NasajonMailServiceBundle:Envios")
+        $envio = $this->registry->getManager("default")->getRepository("NasajonMailServiceBundle:Envios")
                 ->find($mailMessage->getMessageId());
 
         $rows = array();
@@ -100,7 +100,7 @@ class SnsNotificationService {
         }
 
         /** @var Nasajon\Diretorio\MailServiceBundle\Repository\BounceRepository */
-        $rep = $this->registry->getManager("target")->getRepository("NasajonMailServiceBundle:Notification\Bounce");
+        $rep = $this->registry->getManager("default")->getRepository("NasajonMailServiceBundle:Notification\Bounce");
         $rep->gravaDados($rows);
     }
 
@@ -110,7 +110,7 @@ class SnsNotificationService {
         $mailMessage = $notification->getMail();
 
         /** @var Nasajon\Diretorio\MailServiceBundle\Entity\Envios */
-        $envio = $this->registry->getManager("target")->getRepository("NasajonMailServiceBundle:Envios")
+        $envio = $this->registry->getManager("default")->getRepository("NasajonMailServiceBundle:Envios")
                 ->find($mailMessage->getMessageId());
 
         $rows = array();
@@ -128,7 +128,7 @@ class SnsNotificationService {
         }
 
         /** @var Nasajon\Diretorio\MailServiceBundle\Repository\BounceRepository */
-        $rep = $this->registry->getManager("target")->getRepository("NasajonMailServiceBundle:Notification\Bounce");
+        $rep = $this->registry->getManager("default")->getRepository("NasajonMailServiceBundle:Notification\Bounce");
         $rep->gravaDados($rows);
     }
 }

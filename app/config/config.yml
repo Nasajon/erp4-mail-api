@@ -43,32 +43,12 @@ doctrine:
                 mapping_types:
                     json: string
                     enum: string
-                # if using pdo_sqlite as your database driver, add the path in parameters.yml
-                # e.g. database_path: %kernel.root_dir%/data/data.db3
-                # path:     %database_path%
-
-            target:
-                driver:   '%env(database_driver_target)%'
-                host:     '%env(database_host_target)%'
-                port:     '%env(database_port_target)%'
-                dbname:   '%env(database_name_target)%'
-                user:     '%env(database_user_target)%'
-                password: '%env(database_password_target)%'
-                charset:  UTF8
-                server_version: 11.5
-                mapping_types:
-                    json: string
-                    enum: string
 
     orm:
         default_entity_manager: default
         entity_managers:
             default:
                 connection: default
-                mappings:
-                    NasajonMailServiceBundle: ~
-            target:
-                connection: target
                 mappings:
                     NasajonMailServiceBundle: ~
 

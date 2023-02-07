@@ -4,7 +4,7 @@ namespace Nasajon\AppBundle\NsjMail\Receiver;
 
 use Bernard\Producer;
 use Nasajon\AppBundle\NsjMail\Entity\Envios;
-use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoExeception;
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoException;
 use Nasajon\AppBundle\NsjMail\Messages\EnvioMessage;
 use Nasajon\AppBundle\NsjMail\Service\SendEmailService;
 use Psr\Log\LoggerInterface;
@@ -72,12 +72,12 @@ class EmailReceiver {
                 $envio->setMessageId($result->get('MessageId'));
                 $envio->setTenant($message->getTenant());
                 $envio->setDataEnvio(new \DateTime());
-                $this->registry->getEntityManager("target")->persist($envio);
-                $this->registry->getEntityManager("target")->flush();
+                $this->registry->getEntityManager("default")->persist($envio);
+                $this->registry->getEntityManager("default")->flush();
             }
 
 
-        } catch (EmailInvalidoExeception $e) {
+        } catch (EmailInvalidoException $e) {
 
             $this->logger->error('Email inválido', [
                 'queue' => __FUNCTION__,

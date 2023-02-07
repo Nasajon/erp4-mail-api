@@ -116,7 +116,7 @@ services:
         class: Nasajon\AppBundle\NsjMail\Repository\EmailsRepository
         public: true
         arguments:
-            - "@doctrine.dbal.target_connection"
+            - "@doctrine.dbal.default_connection"
 
     Nasajon\AppBundle\NsjMail\Repository\EmailsSmtpRepository:
         class: Nasajon\AppBundle\NsjMail\Repository\EmailsSmtpRepository
