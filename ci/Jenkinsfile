@@ -7,7 +7,7 @@ node('aws-codebuild') {
     def ARGO_NAME = 'erp4-mail-api'
     def ARGO_PROJECT = 'ztapilot'
     def FILENAME = 'values'
-    def CHART_FOLDER = 'charts/location'
+    def CHART_FOLDER = 'charts/nasajon-pilot'
     def NAMESPACE = 'diretorio'
     def DEBUG = false
 
