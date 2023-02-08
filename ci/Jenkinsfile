@@ -1,19 +1,52 @@
 node('aws-codebuild') {
-    
+
+    // Defaults and Placeholders
+    def CLUSTER = "nasajon-ztapilot" 
+    def BRANCH = 'development' 
+    def APP_NAME = 'erp4-mail-api'
+    def ARGO_NAME = 'erp4-mail-api'
+    def ARGO_PROJECT = 'ztapilot'
+    def FILENAME = 'values'
+    def CHART_FOLDER = 'charts/location'
+    def NAMESPACE = 'diretorio'
+    def DEBUG = false
+
     stage('Clean') {
         deleteDir()
     }
-
+    
     stage('Fetch') {
         timeout(time: 60, unit: 'SECONDS') {
             checkout scm
         }
     }
 
-    def PLAYBOOK = "/opt/devops/Ansible/ci.yml"
-    
+    if (env.BRANCH_NAME == 'development') {
+        CLUSTER = "nasajon-ztapilot"
+        BRANCH = 'development'
+        FILENAME = "dev-" + FILENAME
+        ARGO_NAME = ARGO_NAME + '-dev'
+        ARGO_PROJECT = ARGO_PROJECT + '-dev'
+        NAMESPACE = NAMESPACE + '-dev'
+    }
+    else if (env.BRANCH_NAME == 'master') {
+        CLUSTER = "eks-qa"
+        BRANCH = 'master'
+        FILENAME = "qa-" + FILENAME
+        ARGO_NAME = ARGO_NAME + '-qa'
+        ARGO_PROJECT = ARGO_PROJECT + '-qa'
+    }
+    else if (env.BRANCH_NAME == 'production') {
+        CLUSTER = "nasajon-ztapilot"
+        BRANCH = 'production'
+    }else {
+        DEBUG = true
+    }
+
+    def SPRINT_VERSION = "/opt/devops/Ansible/roles/sprint_up/files/ssm_manager.py"
+	
     stage('Environment Config') {
-        sh "auto_config"
+      sh "auto_config"
     }
 
     stage('Config'){
@@ -45,28 +78,68 @@ node('aws-codebuild') {
             sh 'composer dump-autoload'
         }
     }
+ 
+    SPRINT = sh (
+        script: "python3 $SPRINT_VERSION -p $APP_NAME -m get -b $BRANCH -v sprint",
+        returnStdout: true
+    ).trim()
+
+    BUILD = sh (
+        script: "python3 $SPRINT_VERSION -p $APP_NAME -m get -b $BRANCH -v build",
+        returnStdout: true
+    ).trim()
+
+    def VERSION = "v1.$SPRINT.$BUILD"
+
+    if (BRANCH == 'master'){
+        VERSION = "v1.$SPRINT.0-rc$BUILD"
+    }else if (BRANCH == 'development') {
+        VERSION = "v1.$SPRINT.0-alpha$BUILD"
+    }
+
+    stage('Docker ship'){
+        sh "docker build --no-cache --rm -t hub.nasajon.com.br/$APP_NAME:$VERSION ."
+        sh "docker push hub.nasajon.com.br/$APP_NAME:$VERSION"
+        sh "docker rmi -f hub.nasajon.com.br/$APP_NAME:$VERSION"
+        if (DEBUG != true) {
+            sh "python3 $SPRINT_VERSION -p $APP_NAME -m update -b $BRANCH -v build"
+        }
+    }
+
+    stage('git clone'){
+        sh "git clone git@github.com:NasajonSRE/helm.git"
+
+        sh "cp ci/${FILENAME}.yaml helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
+        sh "sed -i \"s/{{ TAG }}/$VERSION/g\" helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
+        sh "cat helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
+
+        if (DEBUG == true) {
+            sh 'exit 0'
+        }
+    
+        dir("helm/$CHART_FOLDER/$APP_NAME"){
+            sh "git config user.email \"deployuser@nasajon.com.br\""
+            sh "git config user.name \"Github Deploy User\""
+            sh "git add ."
+            sh "git commit -m \"Rendered Helm chart values for $APP_NAME - Version $VERSION - Branch $BRANCH\""
+            sh "git push -u origin main || true"
+        }    	
+    }
 
     stage('Deploy'){
-
-    	if (env.BRANCH_NAME == 'development') {
-            stage('Deploy Dev'){
-                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=dev'"
+        docker.image("hub.nasajon.com.br/sre-utils:0.4").inside() {
+            sh "cp /workspace/argo-prod.yaml.j2 /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s#./charts/{{ APP }}#./$CHART_FOLDER/${APP_NAME}#g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s/- values.yaml/- ${FILENAME}.yaml/g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s/{{ APP }}/${ARGO_NAME}/g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s/{{ CLUSTER }}/$CLUSTER/g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s/{{ NAMESPACE }}/$NAMESPACE/g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "sed -i \"s/default/$ARGO_PROJECT/g\" /workspace/${ARGO_NAME}-argo.yaml"
+            sh "cat /workspace/${ARGO_NAME}-argo.yaml"
+            if (DEBUG == true) {
+            sh 'exit 0'
             }
-    	}
-        else if (env.BRANCH_NAME == 'master') {
-	        stage('Deploy QA'){
-	    	    sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=qa'"
-          	}
-        }
-        else if (env.BRANCH_NAME == 'production') {
-            stage('Pipeline Prod'){
-                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=prod'"
-            }
-        }
-        else {
-            stage('Build Docker Image'){
-                sh "ansible-playbook ${PLAYBOOK} -e 'build_path=${WORKSPACE} env=test'"
-            }
+            sh "kubectl --kubeconfig=/workspace/kubeconfig-sre apply -f /workspace/${ARGO_NAME}-argo.yaml"
         }
     }
 }
