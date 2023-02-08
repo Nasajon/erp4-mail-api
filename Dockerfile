@@ -6,5 +6,4 @@ USER nginx
 COPY . /var/www/html/
 USER root
 
-RUN cp app/config/parameters.docker.dist app/config/parameters.yml && \
-    chmod 777 -R /var/www/html/app/cache
+RUN cp app/config/parameters.docker.dist app/config/parameters.yml
