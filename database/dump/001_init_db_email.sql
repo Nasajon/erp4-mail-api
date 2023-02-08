@@ -40,17 +40,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
-CREATE OR REPLACE FUNCTION public.uuid_generate_v4(
-	)
-    RETURNS uuid
-    LANGUAGE 'c'
-    COST 1
-    VOLATILE STRICT PARALLEL UNSAFE
-AS '$libdir/uuid-ossp', 'uuid_generate_v4'
-;
-
-ALTER FUNCTION public.uuid_generate_v4() OWNER TO group_nasajon;
-
 
 CREATE TABLE IF NOT EXISTS email.emailsempresas
 (
@@ -549,6 +538,19 @@ CREATE TABLE IF NOT EXISTS email.motivoscancelamentos
     lastupdate timestamp without time zone DEFAULT now(),
     dataexclusao timestamp without time zone,
     CONSTRAINT "PK_email.motivoscancelamentos" PRIMARY KEY (motivoscancelamento)
+);
+
+CREATE TABLE IF NOT EXISTS email.tenants_configuracoes_smtp
+(
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    nome varchar(120) NOT NULL,    
+    host varchar(120) NOT NULL,    
+    usuario varchar(120) NOT NULL,
+    senha varchar(220) NOT NULL,
+    port smallint NOT NULL,
+    tenant_id smallint NOT NULL,
+    CONSTRAINT pk_email_tenants_smtp_id PRIMARY KEY (id),
+    CONSTRAINT uk_tenant_email UNIQUE (usuario, tenant_id)
 );
 
 ALTER TABLE IF EXISTS email.motivoscancelamentos OWNER to group_nasajon;

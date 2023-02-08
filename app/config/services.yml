@@ -14,15 +14,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    session.memcached:
-        class: Memcached
-        calls:
-            - [ addServer, [ "%env(memcached_host)%", "%env(memcached_port)%" ]]
-
-    session.handler.memcached:
-        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        arguments: [ '@session.memcached', { prefix: 'symfony_skeleton_sess_', expiretime: 86400 } ]
-
 
     ##Services
 

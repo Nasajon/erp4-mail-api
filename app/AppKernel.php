@@ -15,8 +15,6 @@ class AppKernel extends Kernel {
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new LightSaml\SpBundle\LightSamlSpBundle(),
-            new LightSaml\SymfonyBridgeBundle\LightSamlSymfonyBridgeBundle(),
             new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new Nasajon\LoginBundle\NasajonLoginBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),

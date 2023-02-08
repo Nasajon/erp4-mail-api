@@ -12,7 +12,7 @@ final class Version20230203084911 extends AbstractMigration {
     public function up(Schema $schema) {        
 
         $this->addSql("
-            CREATE TABLE email.tenants_configuracoes_smtp
+            CREATE TABLE IF NOT EXISTS email.tenants_configuracoes_smtp
             (
                 id uuid NOT NULL DEFAULT uuid_generate_v4(),
                 nome varchar(120) NOT NULL,    

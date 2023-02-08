@@ -26,7 +26,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47'
@@ -53,7 +53,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47'
@@ -86,7 +86,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'blacklisted@mailinator.com',
                 'tenant' => '47'
@@ -124,7 +124,7 @@ class SendEmailCest
                 'from' => 'Não Responda <noreply@nsmail.com.br>',
                 'codigo' => 'nsj_gerenciador_usuarios_convite',
                 'tags' =>  array(
-                    'url' => getenv('usuario_url') . '/cadastro?cvt=56789',
+                    'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=56789',
                     'usuario' => 'usuario com anexos',
                     'usuario_email' => 'usuariocomanexos@mailinator.com',
                     'tenant' => '47'
@@ -157,7 +157,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'template_inexistente',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47',
@@ -181,7 +181,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47'
@@ -204,7 +204,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47'
@@ -228,7 +228,7 @@ class SendEmailCest
             'from' => 'noreply@nsmail.com.br',
             'codigo' => 'nsj_gerenciador_usuarios_convite',
             'tags' =>  array(
-                'url' => getenv('usuario_url') . '/cadastro?cvt=12345',
+                'url' => 'https://conta.dev.nasajonsistemas.com.br' . '/cadastro?cvt=12345',
                 'usuario' => 'usuario',
                 'usuario_email' => 'usuario@mailinator.com',
                 'tenant' => '47'

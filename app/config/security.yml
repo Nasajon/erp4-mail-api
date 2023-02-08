@@ -38,13 +38,6 @@ security:
             security: false
 
         secured_area:
-            light_saml_sp:
-                provider: nasajon_provider
-                login_path: /saml/login
-                check_path: /saml/login_check
-                failure_path: security_error
-                default_target_path: main_index
-                always_use_default_target_path: true
             logout:
                 path: logout
                 target: default
