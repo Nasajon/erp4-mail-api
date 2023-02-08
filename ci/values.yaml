@@ -1,0 +1,126 @@
+# Chart Helm generico para uso de API's
+# 30/01/2023
+# repo: https://github.com/NasajonSRE/helm.git
+
+project: "Diretorio"
+squad: "Arquitetura"
+tribo: "Arquitetura"
+aditionalNotes: | 
+  Api de emails do Diretorio.
+
+replicaCount: 2
+
+image:
+  repository: hub.nasajon.com.br/erp4-mail-api
+  pullPolicy: Always
+  tag: "{{ TAG }}"
+
+livenessProbe:
+  httpGet:
+    path: /mail/healthcheck
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /mail/healthcheck
+    port: http
+
+imagePullSecrets: 
+  - name: hub
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: api4.nasajon.app
+      paths:
+        - path: /mail
+          pathType: ImplementationSpecific
+  tls: 
+   - secretName: chart-example-tls
+     hosts:
+       - api4.nasajon.app
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+configMap:
+  create: true
+  name: "erp4-mail-api"
+  data: 
+    database_driver: "pdo_pgsql"
+    database_host: "piloto.cvpk2aht8ryw.us-west-2.rds.amazonaws.com"
+    database_port: "5432"
+    database_name: "email"
+    sentry_env: "QA"
+    memcached_host: "memcached-piloto.devops"
+    memcached_port: "11211"
+    amazon_region: "us-west-2"
+    amazon_version: "2010-12-01"
+    amazon_s3_bucket_name: "nasajon-dev"
+    amazon_ses_configuration_set_name: "maladireta-qa"
+    amazon_ses_transactional_configuration_set_name: "maladireta-transactional-qa"
+    email_remetente_notificacoes: "noreply@servicos.nasajon.com.br"
+    template_convite: "nsj_gerenciador_usuarios_convite"
+    diretorio_url: "https://dir.nasajonsistemas.com.br"
+    usuario_url: "https://conta.nasajonsistemas.com.br"
+    diretorio_sistema_id: "266"
+    entity_id: "http://api4.nasajon.app/mail"
+    rabbitmq_host: "rabbit-pilot-rabbitmq.devops"
+    rabbitmq_port: "5672"
+    rabbitmq_vhost: "diretorio"
+    rabbitmq_user: "diretorio_user"
+    
+secret:
+  create: true
+  name: "erp4-mail-api"
+  data: 
+    database_user: "diretorio_user"
+
+persistence:
+  enabled: false 
+  mountPath: "/data"
+  type: pvc
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  size: ""
+  # storageClassName: gp2
