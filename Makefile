@@ -2,6 +2,7 @@
 
 config_common:
 	cp common.env.dist common.env
+	cp app/config/parameters.yml.dist app/config/parameters.yml
 
 composer_install:
 	composer install --ignore-platform-reqs --no-scripts
@@ -34,7 +35,7 @@ start:
 	docker-compose up -d app
 	sudo chmod -R 777 ./var
 
-run: config_common composer_install create_db tests start
+run: config_common composer_install start create_db tests
 
 ##Gera a hash de criptografia para a senha do SMTP
 generate_key:

@@ -1,0 +1,4 @@
+parameters:
+    locale: en
+    log_level: debug
+    log_channels: ["!doctrine", "!console", "!event"]
