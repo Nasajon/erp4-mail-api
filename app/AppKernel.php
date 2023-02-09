@@ -25,7 +25,9 @@ class AppKernel extends Kernel {
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Aws\Symfony\AwsBundle(),
             new \Nasajon\AppBundle\NsjMail\NasajonMailServiceBundle(),
-            new Ekreative\HealthCheckBundle\EkreativeHealthCheckBundle()
+            new Ekreative\HealthCheckBundle\EkreativeHealthCheckBundle(),
+            new LightSaml\SpBundle\LightSamlSpBundle(),
+            new LightSaml\SymfonyBridgeBundle\LightSamlSymfonyBridgeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('prod'), true)) {
