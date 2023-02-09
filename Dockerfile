@@ -1,7 +1,7 @@
-FROM nasajon/php:7.1-fpm-symfony-dev
+FROM nasajon/php:7.1-fpm-symfony
 MAINTAINER Jefferson Santos <jeffersonsantos@nasajon.com.br>
 
-ENV ENV=development
+ENV ENV=production
 
 USER nginx
 COPY . /var/www/html/

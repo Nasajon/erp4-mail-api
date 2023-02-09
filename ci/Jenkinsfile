@@ -65,7 +65,7 @@ node('aws-codebuild') {
     
     stage('Composer'){
         docker.image("nasajon/composer:1.7.2").inside("-v /root/.ssh:/root/.ssh") {
-            sh 'composer install --prefer-dist --optimize-autoloader --no-scripts --ignore-platform-reqs'
+            sh 'composer install --prefer-dist --optimize-autoloader --no-scripts --no-dev --ignore-platform-reqs'
             sh 'composer dump-autoload'
         }
     }
