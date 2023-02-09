@@ -26,11 +26,8 @@ class AppKernel extends Kernel {
             new Aws\Symfony\AwsBundle(),
             new \Nasajon\AppBundle\NsjMail\NasajonMailServiceBundle(),
             new Ekreative\HealthCheckBundle\EkreativeHealthCheckBundle(),
+            new Sentry\SentryBundle\SentryBundle(),
         );
-
-        if (in_array($this->getEnvironment(), array('prod'), true)) {
-            $bundles[] = new Sentry\SentryBundle\SentryBundle();
-        }
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
 
