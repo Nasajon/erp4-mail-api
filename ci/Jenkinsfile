@@ -62,6 +62,19 @@ node('aws-codebuild') {
         sh 'composer install --prefer-dist --optimize-autoloader --no-scripts --ignore-platform-reqs'
         }
     }
+
+    stage('Tests') {
+        docker.image('postgres:11.5').withRun('-e "POSTGRES_DB=email" -e "POSTGRES_USER=email"'){ c ->
+            docker.image('postgres:11.5').inside("--link ${c.id}:postgres -e SCRIPTS_DIR=$WORKSPACE/database/dump -e POSTGRES_HOST=postgres -e POSTGRES_DB=email -e POSTGRES_USER=email -e PGPASSWORD=mysecretpassword ") {
+                sh "bash run_dump $WORKSPACE/database/dump"
+            }
+            docker.image('nasajon/php:7.1-fpm-symfony-dev').inside("--link ${c.id}:postgres --env-file $WORKSPACE/common.env -e SYMFONY_DEPRECATIONS_HELPER=disabled -e sp_metadata=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/idp-FederationMetadata.xml -e sp_certificate_crt=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/server.crt -e sp_certificate_pem=vendor/nasajon/login-bundle/Nasajon/LoginBundle/Resources/server.pem -e SYMFONY_ENV=test") {
+                sh 'app/console doctrine:migrations:migrate --no-interaction'
+                sh 'app/console doctrine:migrations:migrate --no-interaction -q --em=target --configuration=./app/config/doctrine_migrations_bancosweb.yml'
+                sh 'vendor/codeception/codeception/codecept run  --no-colors'
+            }
+        }
+    }
     
     stage('Composer'){
         docker.image("nasajon/composer:1.7.2").inside("-v /root/.ssh:/root/.ssh") {
