@@ -63,17 +63,21 @@ ingress:
       paths:
         - path: /mail
           pathType: ImplementationSpecific
-  - host: api.nasajon.app
-    paths:
-      - path: /mail
-        pathType: ImplementationSpecific
   tls:
-    - secretName: api4-nasajon-tls
-      hosts:
-        - api4.nasajon.app
-    - secretName: api-nasajon-tls
-      hosts:
-        - api.nasajon.app
+    - secretName: chart-example-tls
+     hosts:
+       - api4.nasajon.app     
+#   - host: api.nasajon.app
+#     paths:
+#       - path: /mail
+#         pathType: ImplementationSpecific
+#   tls:
+#     - secretName: api4-nasajon-tls
+#       hosts:
+#         - api4.nasajon.app
+#     - secretName: api-nasajon-tls
+#       hosts:
+#         - api.nasajon.app
 
 resources: {}
 
