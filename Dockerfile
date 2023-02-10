@@ -1,4 +1,4 @@
-FROM nasajon/php:7.1-fpm-symfony
+FROM nasajon/php:7.1-fpm-symfony-dev
 MAINTAINER Jefferson Santos <jeffersonsantos@nasajon.com.br>
 
 ENV ENV=production

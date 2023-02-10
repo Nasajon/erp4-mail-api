@@ -554,3 +554,12 @@ CREATE TABLE IF NOT EXISTS email.motivoscancelamentos
 ALTER TABLE IF EXISTS email.motivoscancelamentos OWNER to group_nasajon;
 
 GRANT ALL ON TABLE email.motivoscancelamentos TO group_nasajon;
+
+CREATE TABLE IF NOT EXISTS public.id_entry (
+    entity_id character varying(255) NOT NULL,
+    id character varying(255) NOT NULL,
+    expiry_timestamp integer NOT NULL
+);
+
+
+ALTER TABLE public.id_entry OWNER TO group_nasajon;

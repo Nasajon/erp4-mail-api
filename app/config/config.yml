@@ -34,7 +34,7 @@ light_saml_symfony_bridge:
             files:
                 - "%env(sp_metadata)%"
     store:
-        id_state: id_store  # name of id store service created in step 6
+        id_state: id_store
     
 # Twig Configuration		
 twig:		
@@ -65,6 +65,7 @@ doctrine:
         entity_managers:
             default:
                 connection: default
+                auto_mapping: true
                 mappings:
                     NasajonMailServiceBundle: ~
 
@@ -132,12 +133,8 @@ light_saml_symfony_bridge:
                 certificate: "%env(sp_certificate_crt)%"
                 key:         "%env(sp_certificate_pem)%"
                 password:    ~
-    party:
-        idp:
-            files:
-                - "%env(sp_metadata)%"
     store:
-        id_state: id_store  # name of id store service created in step 6
+        id_state: id_store
 
 knp_gaufrette:
     adapters:
