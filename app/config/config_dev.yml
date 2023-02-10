@@ -16,9 +16,6 @@ monolog:
         #     type: service
         #     id: Sentry\Monolog\Handler
         #     level: error
-        # filter_info:
-        #     type: service
-        #     id: cloudwatch_handler
         console:
             type: console
             level: info
@@ -52,3 +49,6 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
     organize_migrations: false
+
+# sentry:
+#     dsn: "https://41c8ced766e04df5ae0e9c347770785f@sentry.nasajon.com.br/60"

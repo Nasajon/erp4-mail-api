@@ -23,10 +23,10 @@ monolog:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
-        # sentry:
-        #     type: service
-        #     id: Sentry\Monolog\Handler
-        #     level: error
+        sentry:
+            type: service
+            id: Sentry\Monolog\Handler
+            level: error
         console:
             type: console
             level: info
@@ -65,4 +65,4 @@ knp_gaufrette:
             adapter: emails_anexos
 
 sentry:
-    dsn: "https://3017bc8d9a1b477493ed2c9c90f5d45a:ef4cf8e537364a539b73255da98d9ae1@sentry.nasajon.com.br/8"
+    dsn: "https://41c8ced766e04df5ae0e9c347770785f@sentry.nasajon.com.br/60"
