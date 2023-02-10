@@ -34,7 +34,7 @@ class SendEmailCest
             'tenant' => '47'
         ];
 
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -61,7 +61,7 @@ class SendEmailCest
             'tenant' => '47'
         ];
 
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -94,7 +94,7 @@ class SendEmailCest
             'tenant' => '47'
         ];
 
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -135,7 +135,7 @@ class SendEmailCest
                 'attachments_content_types'  => [$contentType]
             ];
 
-            $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+            $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
             $I->grabResponse();
             $retorno = json_decode($I->grabResponse());
@@ -164,7 +164,7 @@ class SendEmailCest
             ),
             'tenant' => '47'
         ];
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -188,7 +188,7 @@ class SendEmailCest
             ),
             'tenant' => '47'
         ];
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -211,7 +211,7 @@ class SendEmailCest
             ),
             'tenant' => '47'
         ];
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 
@@ -238,7 +238,7 @@ class SendEmailCest
             'attachments_names' => ['arquivonaoexiste.txt'],
             'attachments_content_types'  => ['text/plain']
         ];
-        $I->sendRaw('POST', '/v2/api/sendmail', $mail, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/sendmail', $mail, [], [], null);
 
         $retorno = json_decode($I->grabResponse());
 

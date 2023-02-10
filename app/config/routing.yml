@@ -4,7 +4,7 @@ nasajon_login_bundle:
 ekreative_health_check:
     resource: "@EkreativeHealthCheckBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /mail
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
@@ -16,5 +16,5 @@ app:
 api:
    resource: "routing/api.yml"
    type: rest
-   prefix: /v2/api
+   prefix: mail/v2/api
    type: rest

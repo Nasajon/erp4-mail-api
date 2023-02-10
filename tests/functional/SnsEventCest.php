@@ -394,7 +394,7 @@ class SnsEventCest
             'UnsubscribeURL' => 'https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&Subscriptionarn:aws:sns:us-west-2:649454681089:maladireta-bounces-producao:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55'
         ];
 
-        $I->sendPOST('/v2/api/sns/snsEvent/', $event);
+        $I->sendPOST('/mail/v2/api/sns/snsEvent/', $event);
 
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
@@ -409,7 +409,7 @@ class SnsEventCest
 
         $event = $this->getEvent($this->getBounceMessage());
 
-        $I->sendPOST('/v2/api/sns/snsEvent/', $event);
+        $I->sendPOST('/mail/v2/api/sns/snsEvent/', $event);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
@@ -424,7 +424,7 @@ class SnsEventCest
 
         $event = $this->getEvent($this->getComplaintMessage());
 
-        $I->sendPOST('/v2/api/sns/snsEvent/', $event);
+        $I->sendPOST('/mail/v2/api/sns/snsEvent/', $event);
 
         $I->seeResponseCodeIs(HttpCode::OK);
     }
@@ -436,7 +436,7 @@ class SnsEventCest
 
         $event = $this->getEvent($this->getOpenMessage());
 
-        $I->sendPOST('/v2/api/sns/snsEvent/', $event);
+        $I->sendPOST('/mail/v2/api/sns/snsEvent/', $event);
 
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
@@ -448,7 +448,7 @@ class SnsEventCest
 
         $event = $this->getEvent($this->getClickMessage());
 
-        $I->sendPOST('/v2/api/sns/snsEvent/', $event);
+        $I->sendPOST('/mail/v2/api/sns/snsEvent/', $event);
 
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }

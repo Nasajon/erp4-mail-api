@@ -22,7 +22,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
         $I->seeResponseCodeIs(HttpCode::CREATED);
     }
 
@@ -39,7 +39,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("Este email já está cadastrado para outro tenant.", $data["message"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -57,7 +57,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo nome não pode ser vazio.", $data["erros"]["nome"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -75,7 +75,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo host não pode ser vazio.", $data["erros"]["host"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -93,7 +93,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo usuario não pode ser vazio.", $data["erros"]["usuario"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -111,7 +111,7 @@ class ApiConfiguracoesSmtpCest {
             "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo senha não pode ser vazio.", $data["erros"]["senha"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -129,7 +129,7 @@ class ApiConfiguracoesSmtpCest {
             "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo port não pode ser vazio.", $data["erros"]["port"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -147,7 +147,7 @@ class ApiConfiguracoesSmtpCest {
             "port" => 465
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O campo tenant_id não pode ser vazio.", $data["erros"]["tenant_id"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
@@ -166,7 +166,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $data = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $data = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
         $I->assertEquals('A porta deve ser uma das seguintes: 587, 465 ou 25.', $data['erros']['port']);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
@@ -184,7 +184,7 @@ class ApiConfiguracoesSmtpCest {
 	        "tenant_id" => 47
         ];
 
-        $retorno = $I->sendRaw('POST', '/v2/api/configuracao-smtp', $data, [], [], null);
+        $retorno = $I->sendRaw('POST', '/mail/v2/api/configuracao-smtp', $data, [], [], null);
 
         $I->assertEquals("O email '{$data['usuario']}' é inválido.", $retorno["message"]);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);

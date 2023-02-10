@@ -45,6 +45,9 @@ generate_key:
 rabbit_setup_fabric:
 	docker-compose run --rm app app/console rabbitmq:setup-fabric
 
+debug_router:
+	docker-compose run --rm app app/console debug:router
+
 ## Envio de E-mails
 consume_envio:
 	docker-compose run --rm app app/console bernard:consume --env=dev -vvv envio --stop-when-empty --stop-on-error
