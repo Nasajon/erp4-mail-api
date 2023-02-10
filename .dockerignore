@@ -6,4 +6,3 @@ app/cache/*
 app/logs/*
 build.xml
 Dockerfile
-web/app_dev.php
