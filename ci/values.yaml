@@ -115,6 +115,7 @@ configMap:
     rabbitmq_port: "5672"
     rabbitmq_vhost: "diretorio"
     rabbitmq_user: "diretorio_user"
+    entity_id: "localhost"
 
 secret:
   create: true
