@@ -27,36 +27,6 @@ workers:
   - --env=prod
   - -vvv
   - envio
-  - --stop-when-empty
-  - --stop-on-error
-  podAnnotations: {}
-  podSecurityContext: {}
-  securityContext: {}
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  livenessProbe: {}
-  readinessProbe: {}
-  ingress:
-    enabled: false
-    tls: []
-- name: "logs"
-  replicaCount: 1
-  image:
-    repository: hub.nasajon.com.br/erp4-mail-api
-    pullPolicy: IfNotPresent
-    tag: "{{ TAG }}"
-  targetPort: "80"
-  envFrom:
-  - configMapRef:
-      name: erp4-mail-api
-  - secretRef:
-      name: erp4-mail-api
-  args:
-  - /var/www/html/app/console
-  - rabbitmq:setup-fabric
-  - --env=prod
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
