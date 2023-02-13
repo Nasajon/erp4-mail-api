@@ -2,7 +2,7 @@
 
 namespace Nasajon\AppBundle\NsjMail\Service;
 
-use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoExeception;
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailInvalidoException;
 use Nasajon\AppBundle\NsjMail\Repository\EmailsRepository;
 use Nasajon\AppBundle\NsjMail\Messages\EnvioMessage;
 use Psr\Log\LoggerInterface;
@@ -49,7 +49,7 @@ class EmailsService {
         foreach ($emails as $email) {
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new EmailInvalidoExeception('Email inválido: ' . ($email??" null "), 400);
+                throw new EmailInvalidoException('Email inválido: ' . ($email??" null "), 400);
             }
         }
     }
