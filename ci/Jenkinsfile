@@ -8,6 +8,7 @@ node('aws-codebuild') {
     def ARGO_PROJECT = 'ztapilot'
     def FILENAME = 'values'
     def CHART_FOLDER = 'charts/nasajon-pilot'
+    def WORKERS_FOLDER = 'charts/workers'
     def NAMESPACE = 'diretorio'
     def DEBUG = false
 
@@ -103,6 +104,9 @@ node('aws-codebuild') {
 
         sh "cp ci/${FILENAME}.yaml helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
         sh "sed -i \"s/{{ TAG }}/$VERSION/g\" helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
+
+        sh "cp ci/worker-${FILENAME}.yaml helm/$CHART_FOLDER/$APP_NAME/$WORKERS_FOLDER/${FILENAME}.yaml"
+        sh "sed -i \"s/{{ TAG }}/$VERSION/g\" helm/$CHART_FOLDER/$APP_NAME/$WORKERS_FOLDER/${FILENAME}.yaml"
         sh "cat helm/$CHART_FOLDER/$APP_NAME/${FILENAME}.yaml"
 
         if (DEBUG == true) {

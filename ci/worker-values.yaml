@@ -1,0 +1,62 @@
+# Chart Helm generico para uso de workers
+# 30/01/2023
+# repo: https://github.com/NasajonSRE/helm.git
+
+project: "Diretorio"
+squad: "Arquitetura"
+tribo: "Arquitetura"
+aditionalNotes: | 
+  Workers erp4-mail-api/diretorio.
+
+workers:
+- name: "consume-envio"
+  replicaCount: 1
+  image:
+    repository: hub.nasajon.com.br/erp4-mail-api
+    pullPolicy: IfNotPresent
+    tag: "{{ TAG }}"
+  targetPort: "80"
+  envFrom:
+  - configMapRef:
+      name: erp4-mail-api
+  - secretRef:
+      name: erp4-mail-api
+  args:
+  - /var/www/html/app/console
+  - bernard:consume
+  - --env=prod
+  - -vvv
+  - envio
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  livenessProbe: {}
+  readinessProbe: {}
+  ingress:
+    enabled: false
+    tls: []
+  
+imagePullSecrets: 
+  - name: hub
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
