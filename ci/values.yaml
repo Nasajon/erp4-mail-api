@@ -15,15 +15,15 @@ image:
   pullPolicy: Always
   tag: "{{ TAG }}"
 
-livenessProbe:
-  httpGet:
-    path: /mail/healthcheck
-    port: http
+# livenessProbe:
+#   httpGet:
+#     path: /mail/healthcheck
+#     port: http
 
-readinessProbe:
-  httpGet:
-    path: /mail/healthcheck
-    port: http
+# readinessProbe:
+#   httpGet:
+#     path: /mail/healthcheck
+#     port: http
 
 imagePullSecrets:
   - name: hub
