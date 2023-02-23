@@ -2,6 +2,7 @@
 
 namespace Nasajon\AppBundle\NsjMail\Service;
 
+use Nasajon\AppBundle\NsjMail\Exceptions\EmailDominioInvalidoException;
 use Nasajon\AppBundle\NsjMail\Messages\EnvioMessage;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +35,7 @@ class SendEmailService {
     }
 
     /**
-     * Informa ao receiver se o email foi feito via SMTP ou SES.     
+     * Informa ao receiver se o email será enviado via SMTP ou SES.     
      * @return boolean
      */
     public function getIsSmtp() : bool {
@@ -47,7 +48,6 @@ class SendEmailService {
         $this->isSmtp = false;
 
         if (empty($message->getTo())) {
-
             $this->logger->warning("Endereço do destinatário de email inválido.", $this->envioMessageToArray($message));
             return false;
         }
@@ -58,9 +58,22 @@ class SendEmailService {
             return;
         }
 
-        // Envia via Amazon SES.
-        return $this->emailSesService->enviar($message);
+        //Valida se o email é de domínio da nasajon.
+        if(!$this->validaDominioSes($message->getFrom())) {
+            throw new EmailDominioInvalidoException("O domínio informado é inválido.", 400);
+        }
         
+        //Envia via SES.
+        return $this->emailSesService->enviar($message);
+    }
+
+    /**
+     * Método responsável por validar o email via SES. Somente com o domínio da Nasajon.
+     * @param array $emails
+     * @return boolean
+     */
+    private function validaDominioSes(string $email) : bool {
+        return strpos($email, "@nasajon.com.br") ? true : false;
     }
 
     private function envioMessageToArray(EnvioMessage $message){
@@ -77,4 +90,3 @@ class SendEmailService {
     }
 
 }
-
