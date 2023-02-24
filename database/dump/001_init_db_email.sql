@@ -151,6 +151,19 @@ CREATE TABLE IF NOT EXISTS email.tenants_configuracoes_smtp
 
 ALTER TABLE IF EXISTS email.tenants_configuracoes_smtp OWNER to group_nasajon;
 
+CREATE TABLE IF NOT EXISTS email.envios
+(
+    campanha uuid,
+    contato uuid,
+    dataenvio timestamp without time zone,
+    messageid character varying(60) NOT NULL,
+    tenant bigint
+);
+
+ALTER TABLE IF EXISTS email.envios  OWNER to group_nasajon;
+
+GRANT ALL ON TABLE email.envios TO group_nasajon;
+
 --FUNÇÕES.
 
 CREATE OR REPLACE FUNCTION email.api_bouncespermanentesparablacklist()
