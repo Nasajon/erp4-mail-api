@@ -79,6 +79,11 @@ class EmailSmtpService {
         ->setUsername($smtpData['usuario'])
         ->setPassword($senha);
 
+        //Necessário adicionar a encryption quando a porta for 587
+        if($smtpData['port'] == 587) {
+            $transport->setEncryption("tls");
+        }
+
         $mailer = new Swift_Mailer($transport);
 
         //Cria o email.
@@ -131,11 +136,11 @@ class EmailSmtpService {
         switch($port) {
 
             case self::MAIL_SSL:
-                $host = "ssl://{$host}";
+                $host = "tls://{$host}";
                 break;
 
             case self::MAIL_TLS:
-                $host = "tls://{$host}";
+                $host = $host;
                 break;
 
             case self::MAIL_DEFAULT:
