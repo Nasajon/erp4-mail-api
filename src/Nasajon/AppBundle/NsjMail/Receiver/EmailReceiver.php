@@ -10,6 +10,7 @@ use Nasajon\AppBundle\NsjMail\Messages\EnvioMessage;
 use Nasajon\AppBundle\NsjMail\Service\SendEmailService;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use Doctrine\DBAL\ConnectionException as DBALConnectionException;
+use ErrorException;
 use Nasajon\AppBundle\NsjMail\Exceptions\EmailDominioInvalidoException;
 use Psr\Log\LoggerInterface;
 
@@ -134,7 +135,20 @@ class EmailReceiver {
                 'email' => $message->getFrom()
             ]);
 
-        }catch (\Exception $e) {
+        }catch(ErrorException $e) {
+
+            $this->logger->error('Falha ao enviar e-mail, descartando a mensagem...', [
+                'queue' => __FUNCTION__,
+                'erro' => $e->getMessage(),
+                'tenant' => $message->getTenant(),
+                'sistema' => $message->getSistema(),
+                'codigo' => $message->getCodigoTemplate(),
+                'to' => $message->getTo()
+            ]);
+
+        }
+        
+        catch (\Exception $e) {
             $this->logger->error('Falha ao enviar e-mail', [
                 'queue' => __FUNCTION__,
                 'erro' => $e->getMessage(),
