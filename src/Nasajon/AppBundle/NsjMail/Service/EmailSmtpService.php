@@ -98,19 +98,25 @@ class EmailSmtpService {
         //Verifica se há anexos.
         if(!empty($message->getAttachments())) {
 
+            $messageAttachmentName = $message->getAttachmentsNames();
             $messageContentType = $message->getAttachmentsContentTypes();
 
             foreach($message->getAttachments() as $key => $attachment) {
 
                 $attachmentPath = "{$this->cacheDir}/{$attachment}";
                 $contentType = $messageContentType[$key];
+                $attachmentName = $messageAttachmentName[$key];
 
                 if(method_exists($this->adapter, 'getUrl')) {
                     $attachmentPath = $this->adapter->getUrl($attachment);
                 }
 
-                $mail->attach(Swift_Attachment::fromPath($attachmentPath, $contentType)
-                ->setFilename($this->adapter->read($attachment)));
+                $file = fopen($attachmentPath, 'rb');
+                $data = fread($file, filesize($attachmentPath));
+
+                $attach = new Swift_Attachment($data, $attachmentName, $contentType);
+                $mail->attach($attach);
+                
             }
 
         }
