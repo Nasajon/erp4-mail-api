@@ -64,8 +64,14 @@ class EmailSesService {
             $data .= "Content-Description: {$attachments_names[$key]}\r\n";
             $data .= "Content-Disposition: attachment;filename=\"{$attachments_names[$key]}\"\r\n";
             $data .= "Content-Transfer-Encoding: base64\r\n\r\n";
-            $data .= \base64_encode($this->adapter->read($url)) . "\r\n";
+
+            if(!$this->isBase64($url)) {
+                $data .= \base64_encode($this->adapter->read($url)) . "\r\n";
+            }
+
+            $data .= $this->adapter->read($url) . "\r\n";
         }
+
 
         $data .= "--{$boundary}--\r\n";
 
@@ -97,5 +103,14 @@ class EmailSesService {
             'template' => $message->getCodigoTemplate()
         ];
     }
+
+    /**
+     * Regex para validar se o conteúdo é um base64.
+     * @param string $value - Conteúdo com encode base64.
+     * @return boolean
+     */
+    private function isBase64(string $value) : bool {
+        return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $value);
+      }
 
 }
