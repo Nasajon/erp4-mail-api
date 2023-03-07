@@ -103,23 +103,9 @@ class EmailSmtpService {
             
             foreach($message->getAttachments() as $key => $attachment) {
 
-                $attachmentName = $messageAttachmentName[$key];
-                $attachmentContent = $this->adapter->read($attachment);
-                
-                if($this->isBase64($this->adapter->read($attachment))) {
-                    $attachmentContent = base64_decode($this->adapter->read($attachment));
-                }
-
+                $attachmentName = $messageAttachmentName[$key]; 
+                $attachmentContent = $this->getAttachmentContent($attachment);
                 $attachmentContentType = $messageContentType[$key];
-        
-                if(method_exists($this->adapter, 'getUrl')) {
-
-                    $attachmentContent = $this->adapter->getUrl($attachment);
-
-                    if($this->isBase64($attachmentContent)) {
-                        $attachmentContent = base64_decode($this->adapter->getUrl($attachment));
-                    }
-                }
         
                 $attach = (new Swift_Attachment())
                 ->setBody($attachmentContent)
@@ -137,6 +123,20 @@ class EmailSmtpService {
         }
 
         return false;
+    }
+
+    /**
+     * Recupera o anexo do adapter local ou de produção e verifica se o conteúdo é base64 ou não.     
+     * @param string $path
+     * @return string
+     */
+    private function getAttachmentContent(string $path) : string {
+
+        if(method_exists($this->adapter, 'getUrl')) {
+            return $this->isBase64(file_get_contents($this->adapter->getUrl($path))) ? base64_decode(file_get_contents($this->adapter->getUrl($path))) : file_get_contents($this->adapter->getUrl($path));
+        }
+
+        return $this->isBase64($path) ? base64_decode($this->adapter->read($path)) : $this->adapter->read($path);
     }
 
     /**
