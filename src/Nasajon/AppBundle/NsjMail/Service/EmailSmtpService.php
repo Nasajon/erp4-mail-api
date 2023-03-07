@@ -100,25 +100,29 @@ class EmailSmtpService {
 
             $messageAttachmentName = $message->getAttachmentsNames();
             $messageContentType = $message->getAttachmentsContentTypes();
-
+            
             foreach($message->getAttachments() as $key => $attachment) {
 
-                $attachmentPath = "{$this->cacheDir}/{$attachment}";
-                $contentType = $messageContentType[$key];
                 $attachmentName = $messageAttachmentName[$key];
-
-                if(method_exists($this->adapter, 'getUrl')) {
-                    $attachmentPath = $this->adapter->getUrl($attachment);
+                $attachmentContent = $this->adapter->read($attachment);
+                
+                if($this->isBase64($this->adapter->read($attachment))) {
+                    $attachmentContent = base64_decode($this->adapter->read($attachment));
                 }
 
-                $file = fopen($attachmentPath, 'rb');
-                $data = fread($file, filesize($attachmentPath));
-
-                $attach = new Swift_Attachment($data, $attachmentName, $contentType);
-                $mail->attach($attach);
+                $attachmentContentType = $messageContentType[$key];
+        
+                if(method_exists($this->adapter, 'getUrl')) {
+                    $attachmentContent = $this->adapter->getUrl($attachment);
+                }
+        
+                $attach = (new Swift_Attachment())
+                ->setBody($attachmentContent)
+                ->setFilename($attachmentName)
+                ->setContentType($attachmentContentType);
                 
+                $mail->attach($attach);
             }
-
         }
 
         //Envia o email
@@ -174,5 +178,14 @@ class EmailSmtpService {
             'to' => $message->getTo(),
             'template' => $message->getCodigoTemplate()
         ];
+    }
+
+    /**
+     * Regex para validar se o conteúdo é um base64.
+     * @param string $value - Conteúdo com encode base64.
+     * @return boolean
+     */
+    private function isBase64(string $value) : bool {
+      return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $value);
     }
 }
