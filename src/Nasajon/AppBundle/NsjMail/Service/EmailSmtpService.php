@@ -113,7 +113,12 @@ class EmailSmtpService {
                 $attachmentContentType = $messageContentType[$key];
         
                 if(method_exists($this->adapter, 'getUrl')) {
+
                     $attachmentContent = $this->adapter->getUrl($attachment);
+
+                    if($this->isBase64($attachmentContent)) {
+                        $attachmentContent = base64_decode($this->adapter->getUrl($attachment));
+                    }
                 }
         
                 $attach = (new Swift_Attachment())
