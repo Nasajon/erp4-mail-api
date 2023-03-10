@@ -51,9 +51,10 @@ class EmailsController extends FOSRestController {
                     'sucesso' => false,
                     'erros' => "Problemas ao carregar o template informado, por favor verifique se o nome do template está correto",
                 ], JsonResponse::HTTP_BAD_REQUEST);
-            }
-
-            $email["from"] = $this->identificaRemetenteDoTemplate($template, $email["from"]);
+            }           
+            
+            //Desabilitado temporariamente
+            // $email["from"] = $this->identificaRemetenteDoTemplate($template, $email["from"]);
 
             try {
 
